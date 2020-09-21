@@ -1,0 +1,39 @@
+{
+  "name": "hooker",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "scripts": {
+    "compile": "rm -rf lib/ && tsc",
+    "dev": "ts-node-dev --no-notify src/"
+  },
+  "keywords": [],
+  "author": "Chrift",
+  "license": "ISC",
+  "dependencies": {
+    "@octokit/webhooks": "^7.11.3",
+    "@slack/web-api": "^5.12.0",
+    "node-fetch": "^2.6.1",
+    "s3-folder-upload": "^2.3.1"
+  },
+  "devDependencies": {
+    "@types/node-fetch": "^2.5.7",
+    "pre-commit": "^1.2.2",
+    "ts-node-dev": "^1.0.0-pre.62",
+    "typescript": "^4.0.3"
+  },
+  "pre-commit": [
+    "compile"
+  ],
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/chrift/hooker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/chrift/hooker/issues"
+  },
+  "homepage": "https://github.com/chrift/hooker#readme",
+  "description": ""
+}
