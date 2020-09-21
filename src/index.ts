@@ -58,8 +58,11 @@ export const init = (hookerOptions: HookerOptions) => {
 
     webhooks.on("push", async (hook: HookBody) => {
         // console.log(hook.name, "event received", hook.id, hook.payload);
+        console.log('Event received')
 
         if (hook.payload.ref === hookerOptions.gitRef) {
+            console.log(`Hook ref matches gitRef ${hookerOptions.gitRef}`)
+
             try {
                 for (const step of hookerOptions.steps) {
                     if ('action' in step) {
