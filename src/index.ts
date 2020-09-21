@@ -57,7 +57,7 @@ export const init = (hookerOptions: HookerOptions) => {
     });
 
     webhooks.on("push", async (hook: HookBody) => {
-        console.log(hook.name, "event received", hook.id, hook.payload);
+        // console.log(hook.name, "event received", hook.id, hook.payload);
 
         if (hook.payload.ref === hookerOptions.gitRef) {
             try {
