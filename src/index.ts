@@ -40,14 +40,14 @@ interface HookBody {
     };
 }
 
-export const job = {
+const job = {
     slackMessage: (message: string, slackWebHookUrl: string) => () => slack.sendMessage(message, slackWebHookUrl),
     buildReact: (reactAppRootPath: string) => () => buildReact(reactAppRootPath),
     uploadDirToS3: (dirPath: string, credentials: s3Credentials) => () => s3FolderUpload(dirPath, credentials),
     executeFile: (filePath: string) => () => execFileProm(filePath)
 }
 
-export const init = (hookerOptions: HookerOptions) => {
+const init = (hookerOptions: HookerOptions) => {
     hookerOptions.gitRef = hookerOptions.gitRef || 'refs/heads/master'
     hookerOptions.port = hookerOptions.port || 3100
 
@@ -63,7 +63,7 @@ export const init = (hookerOptions: HookerOptions) => {
 
             try {
                 for (const [index, step] of hookerOptions.steps.entries()) {
-                    const stepNumber = index+1
+                    const stepNumber = index + 1
 
                     if ('action' in step) {
                         console.log(`Running step ${stepNumber}. ${step.name}...`)
@@ -85,6 +85,10 @@ export const init = (hookerOptions: HookerOptions) => {
 
     http.createServer(webhooks.middleware).listen(hookerOptions.port);
 }
+
+export { job, init }
+export default { job, init }
+
 /*
 {
   ref: 'refs/heads/master',

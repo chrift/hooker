@@ -17,7 +17,7 @@ interface s3Credentials {
     region: string;
     bucket: string;
 }
-export declare const job: {
+declare const job: {
     slackMessage: (message: string, slackWebHookUrl: string) => () => any;
     buildReact: (reactAppRootPath: string) => () => import("child_process").PromiseWithChild<{
         stdout: string;
@@ -29,5 +29,21 @@ export declare const job: {
         stderr: string;
     }>;
 };
-export declare const init: (hookerOptions: HookerOptions) => void;
-export {};
+declare const init: (hookerOptions: HookerOptions) => void;
+export { job, init };
+declare const _default: {
+    job: {
+        slackMessage: (message: string, slackWebHookUrl: string) => () => any;
+        buildReact: (reactAppRootPath: string) => () => import("child_process").PromiseWithChild<{
+            stdout: string;
+            stderr: string;
+        }>;
+        uploadDirToS3: (dirPath: string, credentials: s3Credentials) => () => any;
+        executeFile: (filePath: string) => () => import("child_process").PromiseWithChild<{
+            stdout: string;
+            stderr: string;
+        }>;
+    };
+    init: (hookerOptions: HookerOptions) => void;
+};
+export default _default;
