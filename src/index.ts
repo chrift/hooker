@@ -20,6 +20,7 @@ interface HookerStep {
 interface HookerOptions {
     name: string
     webhookSecret: string
+    slackWebHookUrl: string
     gitRef?: string
     port?: number
     steps: Array<HookerStep | HookerAction>
@@ -76,7 +77,7 @@ const init = (hookerOptions: HookerOptions) => {
                     }
                 }
             } catch (e) {
-                slack.sendMessage(`Hooker job ${hookerOptions.name} failed with message ${e.message}`)
+                slack.sendMessage(`Hooker job ${hookerOptions.name} failed with message ${e.message}`, hookerOptions.slackWebHookUrl)
             }
         }
     });

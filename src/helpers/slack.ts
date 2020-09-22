@@ -1,4 +1,3 @@
-// curl -X POST -H 'Content-type: application/json' --data '{"text":"Hello, World!"}' https://hooks.slack.com/services/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
 import fetch from 'node-fetch'
 
 const sendMessage: Function = async <PromiseVoid>(message: string, webhookUrl: string) => {

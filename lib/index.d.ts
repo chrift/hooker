@@ -7,6 +7,7 @@ interface HookerStep {
 interface HookerOptions {
     name: string;
     webhookSecret: string;
+    slackWebHookUrl: string;
     gitRef?: string;
     port?: number;
     steps: Array<HookerStep | HookerAction>;
