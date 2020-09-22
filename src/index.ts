@@ -1,5 +1,4 @@
-import * as util from "util";
-import { execFile } from "child_process";
+
 // @ts-ignore
 import s3FolderUpload from 's3-folder-upload'
 import * as http from 'http'
@@ -7,8 +6,7 @@ import { Webhooks } from "@octokit/webhooks"
 
 import slack from './helpers/slack'
 import buildReact from "./helpers/buildReact";
-
-const execFileProm = util.promisify(execFile)
+import executeFile from "./helpers/executeFile";
 
 type HookerAction = () => Promise<any>
 
@@ -45,7 +43,7 @@ const job = {
     slackMessage: (message: string, slackWebHookUrl: string) => () => slack.sendMessage(message, slackWebHookUrl),
     buildReact: (reactAppRootPath: string) => () => buildReact(reactAppRootPath),
     uploadDirToS3: (dirPath: string, credentials: s3Credentials) => () => s3FolderUpload(dirPath, credentials),
-    executeFile: (filePath: string) => () => execFileProm(filePath)
+    executeFile: (filePath: string) => () => executeFile(filePath)
 }
 
 const init = (hookerOptions: HookerOptions) => {
@@ -71,13 +69,17 @@ const init = (hookerOptions: HookerOptions) => {
                         await step.action()
                         console.log(`Completed step ${stepNumber}. ${step.name}`)
                     } else {
-                        console.log(`Running step ${stepNumber} ...`)
+                        console.log(`Running step ${stepNumber}...`)
                         await step()
                         console.log(`Completed step ${stepNumber}`)
                     }
                 }
             } catch (e) {
-                slack.sendMessage(`Hooker job ${hookerOptions.name} failed with message ${e.message}`, hookerOptions.slackWebHookUrl)
+                const message = `Hooker job ${hookerOptions.name} failed with message ${e.message}`
+
+                console.error(message)
+
+                slack.sendMessage(message, hookerOptions.slackWebHookUrl)
             }
         }
     });
