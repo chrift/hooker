@@ -1,4 +1,3 @@
-
 // @ts-ignore
 import s3FolderUpload from 's3-folder-upload'
 import * as http from 'http'
@@ -74,6 +73,8 @@ const init = (hookerOptions: HookerOptions) => {
                         console.log(`Completed step ${stepNumber}`)
                     }
                 }
+
+                console.log('Completed all steps')
             } catch (e) {
                 const message = `Hooker job ${hookerOptions.name} failed with message ${e.message}`
 
