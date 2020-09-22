@@ -18,7 +18,7 @@ interface s3Credentials {
     bucket: string;
 }
 export declare const job: {
-    slackMessage: (message: string) => () => any;
+    slackMessage: (message: string, slackWebHookUrl: string) => () => any;
     buildReact: (reactAppRootPath: string) => () => import("child_process").PromiseWithChild<{
         stdout: string;
         stderr: string;

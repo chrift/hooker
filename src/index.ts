@@ -3,8 +3,7 @@ import { execFile } from "child_process";
 // @ts-ignore
 import s3FolderUpload from 's3-folder-upload'
 import * as http from 'http'
-
-const { Webhooks } = require("@octokit/webhooks");
+import { Webhooks } from "@octokit/webhooks"
 
 import slack from './helpers/slack'
 import buildReact from "./helpers/buildReact";
@@ -42,7 +41,7 @@ interface HookBody {
 }
 
 export const job = {
-    slackMessage: (message: string) => () => slack.sendMessage(message),
+    slackMessage: (message: string, slackWebHookUrl: string) => () => slack.sendMessage(message, slackWebHookUrl),
     buildReact: (reactAppRootPath: string) => () => buildReact(reactAppRootPath),
     uploadDirToS3: (dirPath: string, credentials: s3Credentials) => () => s3FolderUpload(dirPath, credentials),
     executeFile: (filePath: string) => () => execFileProm(filePath)
@@ -57,18 +56,23 @@ export const init = (hookerOptions: HookerOptions) => {
     });
 
     webhooks.on("push", async (hook: HookBody) => {
-        // console.log(hook.name, "event received", hook.id, hook.payload);
-        console.log('Event received')
+        console.log('Push event received')
 
         if (hook.payload.ref === hookerOptions.gitRef) {
             console.log(`Hook ref matches gitRef ${hookerOptions.gitRef}`)
 
             try {
-                for (const step of hookerOptions.steps) {
+                for (const [index, step] of hookerOptions.steps.entries()) {
+                    const stepNumber = index+1
+
                     if ('action' in step) {
+                        console.log(`Running step ${stepNumber}. ${step.name}...`)
                         await step.action()
+                        console.log(`Completed step ${stepNumber}. ${step.name}`)
                     } else {
+                        console.log(`Running step ${stepNumber} ...`)
                         await step()
+                        console.log(`Completed step ${stepNumber}`)
                     }
                 }
             } catch (e) {
