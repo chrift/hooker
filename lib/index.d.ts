@@ -20,12 +20,16 @@ interface s3Credentials {
 }
 declare const job: {
     slackMessage: (message: string, slackWebHookUrl: string) => () => any;
-    buildReact: (reactAppRootPath: string) => () => import("child_process").PromiseWithChild<{
+    buildReact: (reactAppRootPath: string, envVarString?: string) => () => import("child_process").PromiseWithChild<{
         stdout: string;
         stderr: string;
     }>;
     uploadDirToS3: (dirPath: string, credentials: s3Credentials) => () => any;
     executeFile: (filePath: string) => () => import("child_process").PromiseWithChild<{
+        stdout: string;
+        stderr: string;
+    }>;
+    executeCommand: (rootPath: string, command: string) => () => import("child_process").PromiseWithChild<{
         stdout: string;
         stderr: string;
     }>;
@@ -35,12 +39,16 @@ export { job, init };
 declare const _default: {
     job: {
         slackMessage: (message: string, slackWebHookUrl: string) => () => any;
-        buildReact: (reactAppRootPath: string) => () => import("child_process").PromiseWithChild<{
+        buildReact: (reactAppRootPath: string, envVarString?: string) => () => import("child_process").PromiseWithChild<{
             stdout: string;
             stderr: string;
         }>;
         uploadDirToS3: (dirPath: string, credentials: s3Credentials) => () => any;
         executeFile: (filePath: string) => () => import("child_process").PromiseWithChild<{
+            stdout: string;
+            stderr: string;
+        }>;
+        executeCommand: (rootPath: string, command: string) => () => import("child_process").PromiseWithChild<{
             stdout: string;
             stderr: string;
         }>;
