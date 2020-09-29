@@ -34,8 +34,9 @@ declare const job: {
         stderr: string;
     }>;
 };
+declare const runHookerConfig: (hookerOptions: HookerOptions) => Promise<void>;
 declare const init: (hookerOptions: HookerOptions) => void;
-export { job, init };
+export { job, init, runHookerConfig };
 declare const _default: {
     job: {
         slackMessage: (message: string, slackWebHookUrl: string) => () => any;
@@ -54,5 +55,6 @@ declare const _default: {
         }>;
     };
     init: (hookerOptions: HookerOptions) => void;
+    runHookerConfig: (hookerOptions: HookerOptions) => Promise<void>;
 };
 export default _default;

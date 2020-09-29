@@ -47,6 +47,32 @@ const job = {
   executeCommand: (rootPath: string, command: string) => () => executeCommand(rootPath, command)
 }
 
+const runHookerConfig = async (hookerOptions: HookerOptions) => {
+  try {
+    for (const [index, step] of hookerOptions.steps.entries()) {
+      const stepNumber = index + 1
+
+      if ('action' in step) {
+        console.log(`Running step ${stepNumber}. ${step.name}...`)
+        await step.action()
+        console.log(`Completed step ${stepNumber}. ${step.name}`)
+      } else {
+        console.log(`Running step ${stepNumber}...`)
+        await step()
+        console.log(`Completed step ${stepNumber}`)
+      }
+    }
+
+    console.log('Completed all steps')
+  } catch (e) {
+    const message = `Hooker job ${hookerOptions.name} failed with message ${e.message}`
+
+    console.error(message)
+
+    slack.sendMessage(message, hookerOptions.slackWebHookUrl)
+  }
+}
+
 const init = (hookerOptions: HookerOptions) => {
   hookerOptions.gitRef = hookerOptions.gitRef || 'refs/heads/master'
   hookerOptions.port = hookerOptions.port || 3100
@@ -61,29 +87,7 @@ const init = (hookerOptions: HookerOptions) => {
     if (hook.payload.ref === hookerOptions.gitRef) {
       console.log(`Hook ref matches gitRef ${hookerOptions.gitRef}`)
 
-      try {
-        for (const [index, step] of hookerOptions.steps.entries()) {
-          const stepNumber = index + 1
-
-          if ('action' in step) {
-            console.log(`Running step ${stepNumber}. ${step.name}...`)
-            await step.action()
-            console.log(`Completed step ${stepNumber}. ${step.name}`)
-          } else {
-            console.log(`Running step ${stepNumber}...`)
-            await step()
-            console.log(`Completed step ${stepNumber}`)
-          }
-        }
-
-        console.log('Completed all steps')
-      } catch (e) {
-        const message = `Hooker job ${hookerOptions.name} failed with message ${e.message}`
-
-        console.error(message)
-
-        slack.sendMessage(message, hookerOptions.slackWebHookUrl)
-      }
+      await runHookerConfig(hookerOptions)
     }
   })
 
@@ -92,8 +96,8 @@ const init = (hookerOptions: HookerOptions) => {
   http.createServer(webhooks.middleware).listen(hookerOptions.port)
 }
 
-export { job, init }
-export default { job, init }
+export { job, init, runHookerConfig }
+export default { job, init, runHookerConfig }
 
 /*
 {
