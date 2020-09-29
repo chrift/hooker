@@ -42,7 +42,7 @@ interface HookBody {
 const job = {
   slackMessage: (message: string, slackWebHookUrl: string) => () => slack.sendMessage(message, slackWebHookUrl),
   buildReact: (reactAppRootPath: string, envVarString: string = '') => () => buildReact(reactAppRootPath, envVarString),
-  uploadDirToS3: (dirPath: string, credentials: s3Credentials) => () => s3FolderUpload(dirPath, credentials),
+  uploadDirToS3: (dirPath: string, credentials: s3Credentials) => () => s3FolderUpload(dirPath, credentials, { useFoldersForFileTypes: false }),
   executeFile: (filePath: string) => () => executeFile(filePath),
   executeCommand: (rootPath: string, command: string) => () => executeCommand(rootPath, command)
 }
